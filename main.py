@@ -65,17 +65,24 @@ class ListClientsPage(webapp.RequestHandler):
 
     template_values = { 'clients': clients }
 
-    path = os.path.join(os.path.dirname(__file__), 'index.html')
+    path = os.path.join(os.path.dirname(__file__), 'listclients.html')
     self.response.out.write(template.render(path, template_values))
+
   
 
 class MainHandler(webapp.RequestHandler):
-    def get(self):
-        self.response.out.write('Hello world!')
+  def get(self):
+    template_values = {}
+    path = os.path.join(os.path.dirname(__file__), 'index.html')
+    self.response.out.write(template.render(path, template_values))
 
+
+_URLS = (
+    ('/', MainHandler),
+    ('/listclients', ListClientsPage))
 
 def main():
-    application = webapp.WSGIApplication([('/', ListClientsPage)],
+    application = webapp.WSGIApplication(_URLS,
                                          debug=True)
     util.run_wsgi_app(application)
 
