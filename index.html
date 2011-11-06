@@ -1,0 +1,29 @@
+<html>
+  <body>
+    <table>
+      <tr>
+        <th>First Name</th>
+        <th>Last Name</th>
+        <th>PSU ID</th>
+        <th>Email</th>
+        <th>Phone</th>
+        <th>Notes</th>
+        <th></th>
+        <th></th>   
+      </tr>
+      {% for client in clients %}
+      <tr>
+        <td>{{client.first_name}}</td>
+        <td>{{client.last_name}}</td>
+        <td>{{client.psu_id}}</td>
+        <td>{{client.email}}</td>
+        <td>{{client.phone}}</td>
+        <td>{{client.notes}}</td>
+        <td>Edit</td>
+        <td>Delete</td>
+      </tr>
+      {% endfor %}
+    </table>  
+  </body>
+</html>
+

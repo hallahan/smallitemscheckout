@@ -1,0 +1,26 @@
+<html>
+  <body>
+    <table>
+      <tr>
+        <th>First Name</th>
+        <th>Last Name</th>
+        <th>PSU ID</th>
+        <th>Email</th>
+        <th>Phone</th>
+        <th>Notes</th>
+        <th></th>
+        <th></th>   
+
+      {% for client in clients %}
+        <th>{{client.first_name}}</th>
+        <th>{{client.last_name}}</th>
+        <th>{{client.psu_id}}</th>
+        <th>{{client.email}}</th>
+        <th>{{client.phone}}</th>
+        <th>{{client.notes}}</th>
+        <th>Edit</th>
+        <th>Delete</th>    
+    </table>  
+  </body>
+</html>
+
