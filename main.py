@@ -14,9 +14,9 @@ class Client(db.Model):
   first_name =  db.StringProperty()
   last_name = db.StringProperty()
   psu_id = db.StringProperty()
-  email = db.StringProperty()
-  phone = db.StringProperty()
-  notes = db.StringProperty()
+  email = db.EmailProperty()
+  phone = db.PhoneNumberProperty()
+  notes = db.TextProperty()
 
 def addSampleClients():
   s = Client()
