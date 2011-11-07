@@ -107,6 +107,24 @@ class AddClientPage(webapp.RequestHandler):
     newClient.put()
 
     self.redirect('/listclients')
+
+class AddItemPage(webapp.RequestHandler):
+  def get(self):
+    template_values = {}
+    path = os.path.join(os.path.dirname(__file__), 'additem.html')
+    self.response.out.write(template.render(path, template_values))
+
+  def post(self):
+    name = self.request.get('name')
+    desc = self.request.get('description')
+
+    ni = Item()
+    ni.name = name
+    ni.description = desc
+    ni.put()
+
+    self.redirect('/listitems')
+
      
 
 class MainHandler(webapp.RequestHandler):
@@ -120,7 +138,8 @@ URLS = (
     ('/', MainHandler),
     ('/listclients', ListClientsPage),
     ('/listitems', ListItemsPage),
-    ('/addclient', AddClientPage))
+    ('/addclient', AddClientPage),
+    ('/additem', AddItemPage))
 
 def main():
     application = webapp.WSGIApplication(URLS,
