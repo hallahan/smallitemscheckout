@@ -36,7 +36,7 @@ class Item(db.Model):
 
 class ListClientsPage(webapp.RequestHandler):
   def get(self):
-    addSampleClients()
+    #addSampleClients()
     clients = db.GqlQuery("SELECT * FROM Client ORDER BY last_name, first_name")
     template_values = { 'clients': clients }
     path = os.path.join(os.path.dirname(__file__), 'listclients.html')
