@@ -18,38 +18,6 @@ class Client(db.Model):
   phone = db.PhoneNumberProperty()
   notes = db.TextProperty()
 
-def addSampleClients():
-  s = Client()
-  s.first_name = 'Bob'
-  s.last_name = 'Palmieri'
-  s.psu_id = '945-564-529'
-  s.email = 'palmieri@pdx.edu'
-  s.phone = '503-444-5466'
-  s.notes = 'This is the first test client added to the database'
-
-  t = Client()
-  t.first_name = 'Laura'
-  t.last_name = 'Holloway'
-  t.psu_id = '933-243-543'
-  t.email = 'hollowell@pdx.edu'
-  t.phone = '503-309-3274'
-  t.notes = 'This is the second test client added to the database'
-
-  s.put()
-  t.put()
-
-def addSampleItems():
-  s = Item()
-  s.name = 'Item A'
-  s.description = 'Item a is an item that is the first item. That is why we call it item A.'
-
-  t = Item()
-  t.name = 'Item B'
-  t.description = 'Item B is an item that is the second item. That is why we call it item B.'
-  s.put()
-  t.put()
-
-
 class Item(db.Model):
   name = db.StringProperty()
   description = db.TextProperty()
@@ -76,7 +44,7 @@ class ListClientsPage(webapp.RequestHandler):
 
 class ListItemsPage(webapp.RequestHandler):
   def get(self):
-    addSampleItems()
+    #addSampleItems()
     items = db.GqlQuery("SELECT * FROM Item ORDER BY name")
     template_values = { 'items': items }
     path = os.path.join(os.path.dirname(__file__), 'listitems.html')
@@ -125,6 +93,21 @@ class AddItemPage(webapp.RequestHandler):
 
     self.redirect('/listitems')
 
+class DeleteItemPage(webapp.RequestHandler):
+  def get(self):
+    raw_id = self.request.get('id')
+    id = int(raw_id)
+    item = Item.get_by_id(id)
+    item.delete()
+    self.redirect('/listitems')
+
+class DeleteClientPage(webapp.RequestHandler):
+  def get(self):
+    raw_id = self.request.get('id')
+    id = int(raw_id)
+    client = Client.get_by_id(id)
+    client.delete()
+    self.redirect('/listclients')
      
 
 class MainHandler(webapp.RequestHandler):
@@ -139,7 +122,9 @@ URLS = (
     ('/listclients', ListClientsPage),
     ('/listitems', ListItemsPage),
     ('/addclient', AddClientPage),
-    ('/additem', AddItemPage))
+    ('/additem', AddItemPage),
+    ('/deleteitem', DeleteItemPage),
+    ('/deleteclient', DeleteClientPage))
 
 def main():
     application = webapp.WSGIApplication(URLS,
@@ -150,3 +135,39 @@ def main():
 
 if __name__ == '__main__':
     main()
+
+
+
+
+#TEST CODE
+def addSampleClients():
+  s = Client()
+  s.first_name = 'Bob'
+  s.last_name = 'Palmieri'
+  s.psu_id = '945-564-529'
+  s.email = 'palmieri@pdx.edu'
+  s.phone = '503-444-5466'
+  s.notes = 'This is the first test client added to the database'
+
+  t = Client()
+  t.first_name = 'Laura'
+  t.last_name = 'Holloway'
+  t.psu_id = '933-243-543'
+  t.email = 'hollowell@pdx.edu'
+  t.phone = '503-309-3274'
+  t.notes = 'This is the second test client added to the database'
+
+  s.put()
+  t.put()
+
+def addSampleItems():
+  s = Item()
+  s.name = 'Item A'
+  s.description = 'Item a is an item that is the first item. That is why we call it item A.'
+
+  t = Item()
+  t.name = 'Item B'
+  t.description = 'Item B is an item that is the second item. That is why we call it item B.'
+  s.put()
+  t.put()
+

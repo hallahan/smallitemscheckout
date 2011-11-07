@@ -12,7 +12,7 @@
         <td>{{item.name}}</td>
         <td>{{item.description}}</td>
         <td>Edit</td>
-        <td>Delete</td>
+        <td><a href="/deleteitem?id={{item.key.id}}">Delete</a></td>
       </tr>
       {% endfor %}
     </table>  
