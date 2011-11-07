@@ -2,6 +2,7 @@ import os
 import cgi
 import datetime
 import urllib
+import logging
 import wsgiref.handlers
 from google.appengine.ext import db
 from google.appengine.api import users
@@ -25,11 +26,9 @@ class Item(db.Model):
 #class Checkout(db.Model):
   #client = db.ReferenceProperty(Client)
   #items = db.ListProperty(db.Key)
-
   #returned = db.BooleanProperty()
   #checkout_time = DateTimeProperty(auto_now_add=True)
   #return_time = DateTimeProperty()
-
   #notes = db.TextProperty()
 
 
@@ -70,7 +69,7 @@ class AddClientPage(webapp.RequestHandler):
     newClient.psu_id = psuId
     newClient.email = email
     newClient.phone = phone
-    newClient.notes = notes
+    newClient.notes = notes + "(stub)"
 
     newClient.put()
 
@@ -117,6 +116,7 @@ class EditItemPage(webapp.RequestHandler):
     desc = self.request.get('description')
 
     raw_id = self.request.get('id')
+    logging.info('raw_id of item for post: ' + raw_id)
     item_id = int(raw_id)
     item = Item.get_by_id(item_id)
 
@@ -131,9 +131,12 @@ class EditClientPage(webapp.RequestHandler):
   
   def get(self):
     raw_id = self.request.get('id')
-    id_ = int(raw_id)
-    client = Client.get_by_id(id_)
-    
+    logging.info('raw_id:' + raw_id)
+    self.raw_id = raw_id
+    logging.info('self.raw_id' + self.raw_id)
+    cid = int(raw_id)
+    client = Client.get_by_id(cid)
+       
     template_values = {'client' : client }
     path = os.path.join(os.path.dirname(__file__), 'editclient.html')
     self.response.out.write(template.render(path, template_values))
@@ -145,10 +148,19 @@ class EditClientPage(webapp.RequestHandler):
     e = self.request.get('email')
     p = self.request.get('phone')
     n = self.request.get('notes')
+    cid = self.request.get('id')
+    logging.info('cid from request:'+ cid)
 
-    raw_id = self.request.get('id')
-    cid = int(raw_id)
+    #raw_id = self.request.get('id')
+    #logging.info('in def post(self)')
+    #logging.info('self.raw_id:' + self.raw_id)
+    #logging.info('raw_id:' + raw_id)
+
+    #cid = int(self.raw_id)
     client = Client.get_by_id(cid)
+
+    logging.info('client name:' + client.first_name)
+    logging.info('retrieved cid:' + str(client.id))
 
     client.first_name = fn
     client.last_name = ln
@@ -156,6 +168,7 @@ class EditClientPage(webapp.RequestHandler):
     client.email = e
     client.phone = p
     client.notes = n
+
     client.put()
 
     self.redirect('/listclients')
