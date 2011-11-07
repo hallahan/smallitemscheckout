@@ -19,7 +19,7 @@
         <td>{{client.email}}</td>
         <td>{{client.phone}}</td>
         <td>{{client.notes}}</td>
-        <td>Edit</td>
+        <td><a href="/editclient?id={{client.key.id}}">Edit</a></td>
         <td><a href="/deleteclient?id={{client.key.id}}">Delete</a></td>
       </tr>
       {% endfor %}

@@ -127,8 +127,38 @@ class EditItemPage(webapp.RequestHandler):
     self.redirect('/listitems')
     
 
-#class EditClientPage(webapp.RequestHandler):
-  #def get(self):
+class EditClientPage(webapp.RequestHandler):
+  
+  def get(self):
+    raw_id = self.request.get('id')
+    id_ = int(raw_id)
+    client = Client.get_by_id(id_)
+    
+    template_values = {'client' : client }
+    path = os.path.join(os.path.dirname(__file__), 'editclient.html')
+    self.response.out.write(template.render(path, template_values))
+
+  def post(self):
+    fn = self.request.get('first_name')
+    ln = self.request.get('last_name')
+    pi = self.request.get('psu_id')
+    e = self.request.get('email')
+    p = self.request.get('phone')
+    n = self.request.get('notes')
+
+    raw_id = self.request.get('id')
+    cid = int(raw_id)
+    client = Client.get_by_id(cid)
+
+    client.first_name = fn
+    client.last_name = ln
+    client.psu_id = pi
+    client.email = e
+    client.phone = p
+    client.notes = n
+    client.put()
+
+    self.redirect('/listclients')
     
 
 class DeleteClientAction(webapp.RequestHandler):
@@ -155,7 +185,8 @@ URLS = (
     ('/additem', AddItemPage),
     ('/deleteitem', DeleteItemPage),
     ('/deleteclient', DeleteClientAction),
-    ('/edititem', EditItemPage))
+    ('/edititem', EditItemPage),
+    ('/editclient', EditClientPage))
 def main():
     application = webapp.WSGIApplication(URLS,
                                          debug=True)

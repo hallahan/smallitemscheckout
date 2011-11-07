@@ -1,0 +1,16 @@
+<html>
+  <body>
+    <p>
+    <form method="post" action="/addclient">
+      First Name: <input type="text" name="first_name" value="{{client.first_name}}"/> <br/>
+      Last Name: <input type="text" name="last_name" value="{{client.last_name}}"/> <br/>
+      PSU ID: <input type="text" name = "psu_id" value="{{client.psu_id}}"/> <br/>
+      Email: <input type = "text" name = "email"value="{{client.email}}"/> <br/>
+      Phone: <input type = "text" name = "phone"value="{{client.phone}}"/> <br/>
+      Notes:<br/>
+      <textarea name = "notes" rows="3" cols="60">{{client.notes}}</textarea><br/>
+      <input type="submit" name="editclient"/> 
+    </form>
+    </p>
+  </body>
+</html>
