@@ -101,7 +101,37 @@ class DeleteItemPage(webapp.RequestHandler):
     item.delete()
     self.redirect('/listitems')
 
-class DeleteClientPage(webapp.RequestHandler):
+class EditItemPage(webapp.RequestHandler):
+  
+  def get(self):
+    raw_id = self.request.get('id')
+    item_id = int(raw_id)
+    item = Item.get_by_id(item_id)
+    
+    template_values = {'item' : item }
+    path = os.path.join(os.path.dirname(__file__), 'edititem.html')
+    self.response.out.write(template.render(path, template_values))
+
+  def post(self):
+    name = self.request.get('name')
+    desc = self.request.get('description')
+
+    raw_id = self.request.get('id')
+    item_id = int(raw_id)
+    item = Item.get_by_id(item_id)
+
+    item.name = name
+    item.description = desc
+    item.put()
+
+    self.redirect('/listitems')
+    
+
+#class EditClientPage(webapp.RequestHandler):
+  #def get(self):
+    
+
+class DeleteClientAction(webapp.RequestHandler):
   def get(self):
     raw_id = self.request.get('id')
     id = int(raw_id)
@@ -124,8 +154,8 @@ URLS = (
     ('/addclient', AddClientPage),
     ('/additem', AddItemPage),
     ('/deleteitem', DeleteItemPage),
-    ('/deleteclient', DeleteClientPage))
-
+    ('/deleteclient', DeleteClientAction),
+    ('/edititem', EditItemPage))
 def main():
     application = webapp.WSGIApplication(URLS,
                                          debug=True)

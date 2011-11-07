@@ -11,7 +11,7 @@
       <tr>
         <td>{{item.name}}</td>
         <td>{{item.description}}</td>
-        <td>Edit</td>
+        <td><a href="/edititem?id={{item.key.id}}">Edit</a></td>
         <td><a href="/deleteitem?id={{item.key.id}}">Delete</a></td>
       </tr>
       {% endfor %}

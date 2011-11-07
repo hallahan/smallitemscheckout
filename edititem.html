@@ -2,9 +2,9 @@
   <body>
     <p>
       <form method="post" action"/additem">
-        Name: <input type="text" name="name"/><br/>
+        Name: <input type="text" name="name" value="{{item.name}}"/><br/>
         Description:<br/>
-        <textarea name="description" rows="3" cols="60"></textarea><br/>
+        <textarea name="description" rows="3" cols="60">{{item.description}}</textarea><br/>
         <input type="submit" name="newitem"/>
       </form>
     </p>
