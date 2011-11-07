@@ -1,0 +1,20 @@
+<html>
+  <body>
+    <table>
+      <tr>
+        <th>Item Name</th>
+        <th>Description</th>
+        <th></th>
+        <th></th>   
+      </tr>
+      {% for item in items%}
+      <tr>
+        <td>{{item.name}}</td>
+        <td>{{item.description}}</td>
+        <td>Edit</td>
+        <td>Delete</td>
+      </tr>
+      {% endfor %}
+    </table>  
+  </body>
+</html>

@@ -38,6 +38,18 @@ def addSampleClients():
   s.put()
   t.put()
 
+def addSampleItems():
+  s = Item()
+  s.name = 'Item A'
+  s.description = 'Item a is an item that is the first item. That is why we call it item A.'
+
+  t = Item()
+  t.name = 'Item B'
+  t.description = 'Item B is an item that is the second item. That is why we call it item B.'
+  s.put()
+  t.put()
+
+
 class Item(db.Model):
   name = db.StringProperty()
   description = db.TextProperty()
@@ -53,22 +65,26 @@ class Item(db.Model):
   #notes = db.TextProperty()
 
 
-class Database:
-  def getAllClients(self):
-    return db.GqlQuery("SELECT * FROM Client ORDER BY last_name, first_name")
 
 class ListClientsPage(webapp.RequestHandler):
   def get(self):
     addSampleClients()
-
-    clients = Database().getAllClients()
-
+    clients = db.GqlQuery("SELECT * FROM Client ORDER BY last_name, first_name")
     template_values = { 'clients': clients }
-
     path = os.path.join(os.path.dirname(__file__), 'listclients.html')
     self.response.out.write(template.render(path, template_values))
 
-  
+class ListItemsPage(webapp.RequestHandler):
+  def get(self):
+    addSampleItems()
+    items = db.GqlQuery("SELECT * FROM Item ORDER BY name")
+    template_values = { 'items': items }
+    path = os.path.join(os.path.dirname(__file__), 'listitems.html')
+    self.response.out.write(template.render(path, template_values))
+
+class AddClientPage(webapp.RequestHandler):
+  def put(self):
+     
 
 class MainHandler(webapp.RequestHandler):
   def get(self):
@@ -77,12 +93,13 @@ class MainHandler(webapp.RequestHandler):
     self.response.out.write(template.render(path, template_values))
 
 
-_URLS = (
+URLS = (
     ('/', MainHandler),
-    ('/listclients', ListClientsPage))
+    ('/listclients', ListClientsPage),
+    ('/listitems', ListItemsPage))
 
 def main():
-    application = webapp.WSGIApplication(_URLS,
+    application = webapp.WSGIApplication(URLS,
                                          debug=True)
     util.run_wsgi_app(application)
 
