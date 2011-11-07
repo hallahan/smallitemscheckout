@@ -83,7 +83,30 @@ class ListItemsPage(webapp.RequestHandler):
     self.response.out.write(template.render(path, template_values))
 
 class AddClientPage(webapp.RequestHandler):
-  def put(self):
+  def get(self):
+    template_values = {}
+    path = os.path.join(os.path.dirname(__file__), 'addclient.html')
+    self.response.out.write(template.render(path, template_values))
+
+  def post(self):
+    firstName = self.request.get('first_name')
+    lastName = self.request.get('last_name')
+    psuId = self.request.get('psu_id')
+    email = self.request.get('email')
+    phone = self.request.get('phone')
+    notes = self.request.get('notes')
+
+    newClient = Client()
+    newClient.first_name = firstName
+    newClient.last_name = lastName
+    newClient.psu_id = psuId
+    newClient.email = email
+    newClient.phone = phone
+    newClient.notes = notes
+
+    newClient.put()
+
+    self.redirect('/listclients')
      
 
 class MainHandler(webapp.RequestHandler):
@@ -96,7 +119,8 @@ class MainHandler(webapp.RequestHandler):
 URLS = (
     ('/', MainHandler),
     ('/listclients', ListClientsPage),
-    ('/listitems', ListItemsPage))
+    ('/listitems', ListItemsPage),
+    ('/addclient', AddClientPage))
 
 def main():
     application = webapp.WSGIApplication(URLS,
