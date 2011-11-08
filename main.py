@@ -1,9 +1,9 @@
 import os
 import cgi
-import datetime
 import urllib
 import logging
 import wsgiref.handlers
+from datetime import datetime
 from google.appengine.ext import db
 from google.appengine.api import users
 from google.appengine.ext import webapp
@@ -32,6 +32,7 @@ class Checkout(db.Model):
   return_time = db.DateTimeProperty()
   notes = db.TextProperty()
 
+
 def addSampleCheckouts():
   item1 = Item.get_by_id(39)
   item2 = Item.get_by_id(21)
@@ -57,7 +58,7 @@ def addSampleCheckouts():
   c2.items.append(item4.key())
   c2.returned = False
   c2.checkout_time = datetime(2011,11,5,8,30)
-  c2.return_time = dateTime(2011,11,6,16,20)
+  c2.return_time = datetime(2011,11,6,16,20)
   c2.notes = 'This is the second sample checkout. It should be overdue.'
 
   c3.client = client3
@@ -66,7 +67,7 @@ def addSampleCheckouts():
   c3.items.append(item2.key())
   c3.items.append(item1.key())
   c3.returned = False
-  c3.return_time = dateTime(2011,11,9,17,22)
+  c3.return_time = datetime(2011,11,9,17,22)
   c3.notes = 'This one should be due on Thursday.'
 
   c1.put()
@@ -83,8 +84,13 @@ class ListClientsPage(webapp.RequestHandler):
 
 class CheckoutHistoryPage(webapp.RequestHandler):
   def get(self):
-    addSampleCheckouts()
+    #addSampleCheckouts()
     checkouts = db.GqlQuery("SELECT * FROM Checkout ORDER BY checkout_time")
+
+    #for checkout in checkouts:
+      #checkout.returnTimeAsString = checkout.return_time.ctime()
+      #logging.info(checkout.returnTimeAsString)
+
     template_values = { 'checkouts' : checkouts }
     path = os.path.join(os.path.dirname(__file__), 'checkouthistory.html')
     self.response.out.write(template.render(path, template_values))

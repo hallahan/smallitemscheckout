@@ -11,16 +11,22 @@
       </tr>
       {% for checkout in checkouts %}
       <tr>
-        <td>{{checkout.client.first}} {{checkout.client.last}}</td>
+        <td>{{checkout.client.notes}}</td>
         <td>
-          {% for item in checkout.items %}
-            {{item.name}} <br/>
+          STUB
         </td>
-        <td>{{ str(checkout.returned) }} </td>
-        <td>{{ checkout.checkout_time }} </td>
-        <td>{{ checkout.return_time }} </td>
-        <td>{{ checkout.notes }} </td>
+        <td>
+          {% if checkout.returned %}
+            YES
+          {% else %}
+            NO
+          {% endif %}
+        </td>
+        <td></td>
+        <td>{{ checkout.returnTimeAsString }}</td>
+        <td>{{checkout.notes}}</td>
       </tr>
+      {% endfor %}
     </table>
   </body>
 </html>
