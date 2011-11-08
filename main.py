@@ -18,6 +18,7 @@ class Client(db.Model):
   email = db.EmailProperty()
   phone = db.PhoneNumberProperty()
   notes = db.TextProperty()
+  client_id = db.StringProperty()
 
 class Item(db.Model):
   name = db.StringProperty()
@@ -69,7 +70,7 @@ class AddClientPage(webapp.RequestHandler):
     newClient.psu_id = psuId
     newClient.email = email
     newClient.phone = phone
-    newClient.notes = notes + "(stub)"
+    newClient.notes = notes
 
     newClient.put()
 
@@ -127,16 +128,15 @@ class EditItemPage(webapp.RequestHandler):
     self.redirect('/listitems')
     
 
+
 class EditClientPage(webapp.RequestHandler):
   
   def get(self):
     raw_id = self.request.get('id')
-    logging.info('raw_id:' + raw_id)
-    self.raw_id = raw_id
-    logging.info('self.raw_id' + self.raw_id)
-    cid = int(raw_id)
-    client = Client.get_by_id(cid)
-       
+    id_ = int(raw_id)
+    client = Client.get_by_id(id_)
+    client.client_id = raw_id #TODO we need to find a better way
+    
     template_values = {'client' : client }
     path = os.path.join(os.path.dirname(__file__), 'editclient.html')
     self.response.out.write(template.render(path, template_values))
@@ -148,19 +148,10 @@ class EditClientPage(webapp.RequestHandler):
     e = self.request.get('email')
     p = self.request.get('phone')
     n = self.request.get('notes')
-    cid = self.request.get('id')
-    logging.info('cid from request:'+ cid)
 
-    #raw_id = self.request.get('id')
-    #logging.info('in def post(self)')
-    #logging.info('self.raw_id:' + self.raw_id)
-    #logging.info('raw_id:' + raw_id)
-
-    #cid = int(self.raw_id)
+    raw_id = self.request.get('id')
+    cid = int(raw_id)
     client = Client.get_by_id(cid)
-
-    logging.info('client name:' + client.first_name)
-    logging.info('retrieved cid:' + str(client.id))
 
     client.first_name = fn
     client.last_name = ln
@@ -168,11 +159,9 @@ class EditClientPage(webapp.RequestHandler):
     client.email = e
     client.phone = p
     client.notes = n
-
     client.put()
 
-    self.redirect('/listclients')
-    
+    self.redirect('/listclients')    
 
 class DeleteClientAction(webapp.RequestHandler):
   def get(self):
