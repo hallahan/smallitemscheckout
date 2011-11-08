@@ -22,8 +22,8 @@
             NO
           {% endif %}
         </td>
-        <td></td>
-        <td>{{ checkout.returnTimeAsString }}</td>
+        <td>{{ checkout.checkout_time }}</td>
+        <td>{{ checkout.return_time }}</td>
         <td>{{checkout.notes}}</td>
       </tr>
       {% endfor %}
