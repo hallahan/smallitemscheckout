@@ -27,10 +27,21 @@ class Item(db.Model):
 class Checkout(db.Model):
   client = db.ReferenceProperty(reference_class=Client)
   items = db.ListProperty(db.Key)
-  returned = db.BooleanProperty()
+  returned = db.BooleanProperty(default=False)
   checkout_time = db.DateTimeProperty(auto_now_add=True)
   return_time = db.DateTimeProperty()
   notes = db.TextProperty()
+
+  itemObjs = list()
+
+  def __init__(self):
+    for item_key in self.items:
+      self.itemObjs.append(db.get(item_key))
+
+#class CheckoutItemRel(db.Model):
+  #checkout = db.ReferenceProperty(Checkout)
+  #item = db.ReferenceProperty(Item)
+  #quantity = db.Integer(default=1)
 
 
 def addSampleCheckouts():
@@ -84,13 +95,9 @@ class ListClientsPage(webapp.RequestHandler):
 
 class CheckoutHistoryPage(webapp.RequestHandler):
   def get(self):
-    #addSampleCheckouts()
-    checkouts = db.GqlQuery("SELECT * FROM Checkout ORDER BY checkout_time")
-
-    #for checkout in checkouts:
-      #checkout.returnTimeAsString = checkout.return_time.ctime()
-      #logging.info(checkout.returnTimeAsString)
-
+    addSampleCheckouts()
+    checkouts = db.GqlQuery("SELECT * FROM Checkout ORDER BY checkout_time")    
+  
     template_values = { 'checkouts' : checkouts }
     path = os.path.join(os.path.dirname(__file__), 'checkouthistory.html')
     self.response.out.write(template.render(path, template_values))
