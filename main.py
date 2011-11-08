@@ -24,15 +24,54 @@ class Item(db.Model):
   name = db.StringProperty()
   description = db.TextProperty()
 
-#class Checkout(db.Model):
-  #client = db.ReferenceProperty(Client)
-  #items = db.ListProperty(db.Key)
-  #returned = db.BooleanProperty()
-  #checkout_time = DateTimeProperty(auto_now_add=True)
-  #return_time = DateTimeProperty()
-  #notes = db.TextProperty()
+class Checkout(db.Model):
+  client = db.ReferenceProperty(Client)
+  items = db.ListProperty(db.Key)
+  returned = db.BooleanProperty()
+  checkout_time = db.DateTimeProperty(auto_now_add=True)
+  return_time = db.DateTimeProperty()
+  notes = db.TextProperty()
 
+def addSampleCheckout():
+  item1 = Item.get_by_id(39)
+  item2 = Item.get_by_id(21)
+  item3 = Item.get_by_id(49)
+  item4 = Item.get_by_id(20)
 
+  client1 = Item.get_by_id(5)
+  client2 = Item.get_by_id(17)
+  client3 = Item.get_by_id(46)
+
+  c1 = Checkout()
+  c2 = Checkout()
+  c3 = Checkout()
+  
+  c1.client = client1
+  c1.items.append(item1.key())
+  c1.items.append(item2.key())
+  c1.returned = False
+  c1.return_time = datetime(2011,12,12,15,30)
+  c1.notes = 'This is the first sample checkout.'
+
+  c2.client = client2
+  c2.items.append(item4.key())
+  c2.returned = False
+  c2.checkout_time = datetime(2011,11,5,8,30)
+  c2.return_time = dateTime(2011,11,6,16,20)
+  c2.notes = 'This is the second sample checkout. It should be overdue.'
+
+  c3.client = client3
+  c3.items.append(item4.key())
+  c3.items.append(item3.key())
+  c3.items.append(item2.key())
+  c3.items.append(item1.key())
+  c3.returned = False
+  c3.return_time = dateTime(2011,11,9,17,22)
+  c3.notes 'This one should be due on Thursday.'
+
+  c1.put()
+  c2.put()
+  c3.put()
 
 class ListClientsPage(webapp.RequestHandler):
   def get(self):
