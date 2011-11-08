@@ -1,0 +1,26 @@
+<html>
+  <body>
+    <table>
+      <tr>
+        <th>Client Name</th>
+        <th>Items</th>
+        <th>Returned</th>
+        <th>Checkout Time</th>
+        <th>Return Time</th>
+        <th>Notes</th>
+      </tr>
+      {% for checkout in checkouts %}
+      <tr>
+        <td>{{checkout.client.first}} {{checkout.client.last}}</td>
+        <td>
+          {% for item in checkout.items %}
+            {{item.name}} <br/>
+        </td>
+        <td>{{ str(checkout.returned) }} </td>
+        <td>{{ checkout.checkout_time }} </td>
+        <td>{{ checkout.return_time }} </td>
+        <td>{{ checkout.notes }} </td>
+      </tr>
+    </table>
+  </body>
+</html>

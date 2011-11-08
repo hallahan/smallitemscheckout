@@ -32,7 +32,7 @@ class Checkout(db.Model):
   return_time = db.DateTimeProperty()
   notes = db.TextProperty()
 
-def addSampleCheckout():
+def addSampleCheckouts():
   item1 = Item.get_by_id(39)
   item2 = Item.get_by_id(21)
   item3 = Item.get_by_id(49)
@@ -67,7 +67,7 @@ def addSampleCheckout():
   c3.items.append(item1.key())
   c3.returned = False
   c3.return_time = dateTime(2011,11,9,17,22)
-  c3.notes 'This one should be due on Thursday.'
+  c3.notes = 'This one should be due on Thursday.'
 
   c1.put()
   c2.put()
@@ -79,6 +79,14 @@ class ListClientsPage(webapp.RequestHandler):
     clients = db.GqlQuery("SELECT * FROM Client ORDER BY last_name, first_name")
     template_values = { 'clients': clients }
     path = os.path.join(os.path.dirname(__file__), 'listclients.html')
+    self.response.out.write(template.render(path, template_values))
+
+class CheckoutHistoryPage(webapp.RequestHandler):
+  def get(self):
+    addSampleCheckouts()
+    checkouts = db.GqlQuery("SELECT * FROM Checkout ORDER BY checkout_time")
+    template_values = { 'checkouts' : checkouts }
+    path = os.path.join(os.path.dirname(__file__), 'checkouthistory.html')
     self.response.out.write(template.render(path, template_values))
 
 class ListItemsPage(webapp.RequestHandler):
@@ -227,7 +235,10 @@ URLS = (
     ('/deleteitem', DeleteItemPage),
     ('/deleteclient', DeleteClientAction),
     ('/edititem', EditItemPage),
-    ('/editclient', EditClientPage))
+    ('/editclient', EditClientPage),
+    ('/checkouthistory', CheckoutHistoryPage))
+
+
 def main():
     application = webapp.WSGIApplication(URLS,
                                          debug=True)
