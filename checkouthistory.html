@@ -11,15 +11,19 @@
       </tr>
       {% for checkout in checkouts %}
       <tr>
-        <td>{{checkout.client.notes}}</td>
         <td>
-          STUB
+          {{checkout.client.first_name}} {{checkout.client.last_name}}
+        </td>
+        <td>
+          {% for item in checkout.items %}
+            {{ item.name }} <br/>
+          {% endfor %}
         </td>
         <td>
           {% if checkout.returned %}
-            YES
+            Yes
           {% else %}
-            NO
+            No
           {% endif %}
         </td>
         <td>{{ checkout.checkout_time }}</td>

@@ -25,7 +25,7 @@ class Item(db.Model):
   description = db.TextProperty()
 
 class Checkout(db.Model):
-  client = db.ReferenceProperty(Client)
+  client = db.ReferenceProperty(reference_class=Client)
   items = db.ListProperty(db.Key)
   returned = db.BooleanProperty()
   checkout_time = db.DateTimeProperty(auto_now_add=True)
@@ -39,9 +39,9 @@ def addSampleCheckouts():
   item3 = Item.get_by_id(49)
   item4 = Item.get_by_id(20)
 
-  client1 = Item.get_by_id(5)
-  client2 = Item.get_by_id(17)
-  client3 = Item.get_by_id(46)
+  client1 = Client.get_by_id(5)
+  client2 = Client.get_by_id(17)
+  client3 = Client.get_by_id(46)
 
   c1 = Checkout()
   c2 = Checkout()
